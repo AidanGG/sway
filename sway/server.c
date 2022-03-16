@@ -194,7 +194,6 @@ bool server_init(struct sway_server *server) {
 	wlr_export_dmabuf_manager_v1_create(server->wl_display);
 	wlr_screencopy_manager_v1_create(server->wl_display);
 	wlr_data_control_manager_v1_create(server->wl_display);
-	wlr_primary_selection_v1_device_manager_create(server->wl_display);
 	wlr_viewporter_create(server->wl_display);
 
 	struct wlr_xdg_foreign_registry *foreign_registry =
@@ -286,6 +285,10 @@ bool server_start(struct sway_server *server) {
 		}
 	}
 #endif
+
+	if (config->primary_selection) {
+		wlr_primary_selection_v1_device_manager_create(server->wl_display);
+	}
 
 	sway_log(SWAY_INFO, "Starting backend on wayland display '%s'",
 			server->socket);
